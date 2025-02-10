@@ -1,0 +1,1219 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "e78d49e0-72a0-44bb-9915-ab93b73414e2",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: numpy in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (2.2.2)\n",
+      "Requirement already satisfied: pandas in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (2.2.3)\n",
+      "Requirement already satisfied: numpy>=1.23.2 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from pandas) (2.2.2)\n",
+      "Requirement already satisfied: python-dateutil>=2.8.2 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from pandas) (2.9.0.post0)\n",
+      "Requirement already satisfied: pytz>=2020.1 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from pandas) (2025.1)\n",
+      "Requirement already satisfied: tzdata>=2022.7 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from pandas) (2025.1)\n",
+      "Requirement already satisfied: six>=1.5 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from python-dateutil>=2.8.2->pandas) (1.17.0)\n",
+      "Requirement already satisfied: matplotlib in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (3.10.0)\n",
+      "Requirement already satisfied: contourpy>=1.0.1 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from matplotlib) (1.3.1)\n",
+      "Requirement already satisfied: cycler>=0.10 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from matplotlib) (0.12.1)\n",
+      "Requirement already satisfied: fonttools>=4.22.0 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from matplotlib) (4.55.8)\n",
+      "Requirement already satisfied: kiwisolver>=1.3.1 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from matplotlib) (1.4.8)\n",
+      "Requirement already satisfied: numpy>=1.23 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from matplotlib) (2.2.2)\n",
+      "Requirement already satisfied: packaging>=20.0 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from matplotlib) (24.2)\n",
+      "Requirement already satisfied: pillow>=8 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from matplotlib) (11.1.0)\n",
+      "Requirement already satisfied: pyparsing>=2.3.1 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from matplotlib) (3.2.1)\n",
+      "Requirement already satisfied: python-dateutil>=2.7 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from matplotlib) (2.9.0.post0)\n",
+      "Requirement already satisfied: six>=1.5 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from python-dateutil>=2.7->matplotlib) (1.17.0)\n"
+     ]
+    }
+   ],
+   "source": [
+    "!pip install numpy\n",
+    "!pip install pandas\n",
+    "!pip install matplotlib"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "432f4822-e591-4b66-8f2c-707eac650e5c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "import matplotlib as plot"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "bbf8f225-244a-48fe-a99e-0ea08ed21da9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data = pd.read_csv(\"GenZ_DatingApp_Data.csv\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "f19ef670-d328-439e-abc9-38aa64a8cc62",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>User_ID</th>\n",
+       "      <th>Age</th>\n",
+       "      <th>Gender</th>\n",
+       "      <th>Location</th>\n",
+       "      <th>Education</th>\n",
+       "      <th>Occupation</th>\n",
+       "      <th>Primary_App</th>\n",
+       "      <th>Secondary_Apps</th>\n",
+       "      <th>Usage_Frequency</th>\n",
+       "      <th>Daily_Usage_Time</th>\n",
+       "      <th>Reason_for_Using</th>\n",
+       "      <th>Satisfaction</th>\n",
+       "      <th>Challenges</th>\n",
+       "      <th>Desired_Features</th>\n",
+       "      <th>Preferred_Communication</th>\n",
+       "      <th>Partner_Priorities</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>1</td>\n",
+       "      <td>20</td>\n",
+       "      <td>Non-binary</td>\n",
+       "      <td>Bangalore</td>\n",
+       "      <td>Undergraduate</td>\n",
+       "      <td>Freelancer</td>\n",
+       "      <td>Hinge</td>\n",
+       "      <td>Hinge</td>\n",
+       "      <td>Monthly</td>\n",
+       "      <td>1 hour</td>\n",
+       "      <td>Finding a Partner</td>\n",
+       "      <td>4</td>\n",
+       "      <td>Safety Concerns</td>\n",
+       "      <td>Audio Calls</td>\n",
+       "      <td>Video Calls</td>\n",
+       "      <td>Values &gt; Personality &gt; Appearance</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>2</td>\n",
+       "      <td>24</td>\n",
+       "      <td>Female</td>\n",
+       "      <td>Delhi</td>\n",
+       "      <td>Undergraduate</td>\n",
+       "      <td>Part-time Job</td>\n",
+       "      <td>Hinge</td>\n",
+       "      <td>OkCupid</td>\n",
+       "      <td>Weekly</td>\n",
+       "      <td>30 minutes</td>\n",
+       "      <td>Casual Dating</td>\n",
+       "      <td>5</td>\n",
+       "      <td>Time-Wasting</td>\n",
+       "      <td>Video Calls</td>\n",
+       "      <td>Text</td>\n",
+       "      <td>Values &gt; Personality &gt; Appearance</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>3</td>\n",
+       "      <td>24</td>\n",
+       "      <td>Non-binary</td>\n",
+       "      <td>Kolkata</td>\n",
+       "      <td>Undergraduate</td>\n",
+       "      <td>Intern</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>Weekly</td>\n",
+       "      <td>2 hours</td>\n",
+       "      <td>Casual Dating</td>\n",
+       "      <td>4</td>\n",
+       "      <td>Safety Concerns</td>\n",
+       "      <td>Detailed Profiles</td>\n",
+       "      <td>Text</td>\n",
+       "      <td>Values &gt; Personality &gt; Appearance</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>4</td>\n",
+       "      <td>22</td>\n",
+       "      <td>Non-binary</td>\n",
+       "      <td>Delhi</td>\n",
+       "      <td>Graduate</td>\n",
+       "      <td>Full-time Job</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>OkCupid</td>\n",
+       "      <td>Daily</td>\n",
+       "      <td>30 minutes</td>\n",
+       "      <td>Casual Fun</td>\n",
+       "      <td>3</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>AI Recommendations</td>\n",
+       "      <td>Voice Notes</td>\n",
+       "      <td>Personality &gt; Interests &gt; Values</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>5</td>\n",
+       "      <td>18</td>\n",
+       "      <td>Male</td>\n",
+       "      <td>Delhi</td>\n",
+       "      <td>Graduate</td>\n",
+       "      <td>Intern</td>\n",
+       "      <td>OkCupid</td>\n",
+       "      <td>OkCupid</td>\n",
+       "      <td>Weekly</td>\n",
+       "      <td>2 hours</td>\n",
+       "      <td>Casual Fun</td>\n",
+       "      <td>4</td>\n",
+       "      <td>Safety Concerns</td>\n",
+       "      <td>Video Calls</td>\n",
+       "      <td>Text</td>\n",
+       "      <td>Appearance &gt; Interests &gt; Personality</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   User_ID  Age      Gender   Location      Education     Occupation  \\\n",
+       "0        1   20  Non-binary  Bangalore  Undergraduate     Freelancer   \n",
+       "1        2   24      Female      Delhi  Undergraduate  Part-time Job   \n",
+       "2        3   24  Non-binary    Kolkata  Undergraduate         Intern   \n",
+       "3        4   22  Non-binary      Delhi       Graduate  Full-time Job   \n",
+       "4        5   18        Male      Delhi       Graduate         Intern   \n",
+       "\n",
+       "  Primary_App Secondary_Apps Usage_Frequency Daily_Usage_Time  \\\n",
+       "0       Hinge          Hinge         Monthly           1 hour   \n",
+       "1       Hinge        OkCupid          Weekly       30 minutes   \n",
+       "2         NaN            NaN          Weekly          2 hours   \n",
+       "3         NaN        OkCupid           Daily       30 minutes   \n",
+       "4     OkCupid        OkCupid          Weekly          2 hours   \n",
+       "\n",
+       "    Reason_for_Using  Satisfaction       Challenges    Desired_Features  \\\n",
+       "0  Finding a Partner             4  Safety Concerns         Audio Calls   \n",
+       "1      Casual Dating             5     Time-Wasting         Video Calls   \n",
+       "2      Casual Dating             4  Safety Concerns   Detailed Profiles   \n",
+       "3         Casual Fun             3              NaN  AI Recommendations   \n",
+       "4         Casual Fun             4  Safety Concerns         Video Calls   \n",
+       "\n",
+       "  Preferred_Communication                    Partner_Priorities  \n",
+       "0             Video Calls     Values > Personality > Appearance  \n",
+       "1                    Text     Values > Personality > Appearance  \n",
+       "2                    Text     Values > Personality > Appearance  \n",
+       "3             Voice Notes      Personality > Interests > Values  \n",
+       "4                    Text  Appearance > Interests > Personality  "
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "94405736-d8bb-4b6d-a940-e5946afbd13f",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>User_ID</th>\n",
+       "      <th>Age</th>\n",
+       "      <th>Gender</th>\n",
+       "      <th>Location</th>\n",
+       "      <th>Education</th>\n",
+       "      <th>Occupation</th>\n",
+       "      <th>Primary_App</th>\n",
+       "      <th>Secondary_Apps</th>\n",
+       "      <th>Usage_Frequency</th>\n",
+       "      <th>Daily_Usage_Time</th>\n",
+       "      <th>Reason_for_Using</th>\n",
+       "      <th>Satisfaction</th>\n",
+       "      <th>Challenges</th>\n",
+       "      <th>Desired_Features</th>\n",
+       "      <th>Preferred_Communication</th>\n",
+       "      <th>Partner_Priorities</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>495</th>\n",
+       "      <td>496</td>\n",
+       "      <td>23</td>\n",
+       "      <td>Female</td>\n",
+       "      <td>Mumbai</td>\n",
+       "      <td>Undergraduate</td>\n",
+       "      <td>Intern</td>\n",
+       "      <td>Tinder</td>\n",
+       "      <td>Hinge</td>\n",
+       "      <td>Weekly</td>\n",
+       "      <td>1.5 hours</td>\n",
+       "      <td>Casual Dating</td>\n",
+       "      <td>2</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>Audio Calls</td>\n",
+       "      <td>Voice Notes</td>\n",
+       "      <td>Personality &gt; Interests &gt; Values</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>496</th>\n",
+       "      <td>497</td>\n",
+       "      <td>23</td>\n",
+       "      <td>Male</td>\n",
+       "      <td>Mumbai</td>\n",
+       "      <td>Postgraduate</td>\n",
+       "      <td>Intern</td>\n",
+       "      <td>OkCupid</td>\n",
+       "      <td>Tinder</td>\n",
+       "      <td>Daily</td>\n",
+       "      <td>2 hours</td>\n",
+       "      <td>Casual Fun</td>\n",
+       "      <td>1</td>\n",
+       "      <td>Time-Wasting</td>\n",
+       "      <td>Video Calls</td>\n",
+       "      <td>Video Calls</td>\n",
+       "      <td>Values &gt; Personality &gt; Appearance</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>497</th>\n",
+       "      <td>498</td>\n",
+       "      <td>22</td>\n",
+       "      <td>Male</td>\n",
+       "      <td>Hyderabad</td>\n",
+       "      <td>Graduate</td>\n",
+       "      <td>Freelancer</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>Hinge</td>\n",
+       "      <td>Monthly</td>\n",
+       "      <td>2 hours</td>\n",
+       "      <td>Casual Fun</td>\n",
+       "      <td>2</td>\n",
+       "      <td>Lack of Genuine Matches</td>\n",
+       "      <td>Video Calls</td>\n",
+       "      <td>Voice Notes</td>\n",
+       "      <td>Appearance &gt; Interests &gt; Personality</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>498</th>\n",
+       "      <td>499</td>\n",
+       "      <td>21</td>\n",
+       "      <td>Female</td>\n",
+       "      <td>Kolkata</td>\n",
+       "      <td>Graduate</td>\n",
+       "      <td>Student</td>\n",
+       "      <td>Tinder</td>\n",
+       "      <td>Hinge</td>\n",
+       "      <td>Daily</td>\n",
+       "      <td>1.5 hours</td>\n",
+       "      <td>Casual Dating</td>\n",
+       "      <td>3</td>\n",
+       "      <td>Lack of Genuine Matches</td>\n",
+       "      <td>Detailed Profiles</td>\n",
+       "      <td>Text</td>\n",
+       "      <td>Appearance &gt; Interests &gt; Personality</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>499</th>\n",
+       "      <td>500</td>\n",
+       "      <td>22</td>\n",
+       "      <td>Male</td>\n",
+       "      <td>Mumbai</td>\n",
+       "      <td>Graduate</td>\n",
+       "      <td>Part-time Job</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>Hinge</td>\n",
+       "      <td>Weekly</td>\n",
+       "      <td>1.5 hours</td>\n",
+       "      <td>Casual Fun</td>\n",
+       "      <td>2</td>\n",
+       "      <td>Time-Wasting</td>\n",
+       "      <td>AI Recommendations</td>\n",
+       "      <td>Video Calls</td>\n",
+       "      <td>Appearance &gt; Interests &gt; Personality</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "     User_ID  Age  Gender   Location      Education     Occupation  \\\n",
+       "495      496   23  Female     Mumbai  Undergraduate         Intern   \n",
+       "496      497   23    Male     Mumbai   Postgraduate         Intern   \n",
+       "497      498   22    Male  Hyderabad       Graduate     Freelancer   \n",
+       "498      499   21  Female    Kolkata       Graduate        Student   \n",
+       "499      500   22    Male     Mumbai       Graduate  Part-time Job   \n",
+       "\n",
+       "    Primary_App Secondary_Apps Usage_Frequency Daily_Usage_Time  \\\n",
+       "495      Tinder          Hinge          Weekly        1.5 hours   \n",
+       "496     OkCupid         Tinder           Daily          2 hours   \n",
+       "497         NaN          Hinge         Monthly          2 hours   \n",
+       "498      Tinder          Hinge           Daily        1.5 hours   \n",
+       "499         NaN          Hinge          Weekly        1.5 hours   \n",
+       "\n",
+       "    Reason_for_Using  Satisfaction               Challenges  \\\n",
+       "495    Casual Dating             2                      NaN   \n",
+       "496       Casual Fun             1             Time-Wasting   \n",
+       "497       Casual Fun             2  Lack of Genuine Matches   \n",
+       "498    Casual Dating             3  Lack of Genuine Matches   \n",
+       "499       Casual Fun             2             Time-Wasting   \n",
+       "\n",
+       "       Desired_Features Preferred_Communication  \\\n",
+       "495         Audio Calls             Voice Notes   \n",
+       "496         Video Calls             Video Calls   \n",
+       "497         Video Calls             Voice Notes   \n",
+       "498   Detailed Profiles                    Text   \n",
+       "499  AI Recommendations             Video Calls   \n",
+       "\n",
+       "                       Partner_Priorities  \n",
+       "495      Personality > Interests > Values  \n",
+       "496     Values > Personality > Appearance  \n",
+       "497  Appearance > Interests > Personality  \n",
+       "498  Appearance > Interests > Personality  \n",
+       "499  Appearance > Interests > Personality  "
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data.tail()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "1e661843-9bf0-426b-96de-d41a3f3c1527",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "RangeIndex: 500 entries, 0 to 499\n",
+      "Data columns (total 16 columns):\n",
+      " #   Column                   Non-Null Count  Dtype \n",
+      "---  ------                   --------------  ----- \n",
+      " 0   User_ID                  500 non-null    int64 \n",
+      " 1   Age                      500 non-null    int64 \n",
+      " 2   Gender                   500 non-null    object\n",
+      " 3   Location                 500 non-null    object\n",
+      " 4   Education                500 non-null    object\n",
+      " 5   Occupation               500 non-null    object\n",
+      " 6   Primary_App              393 non-null    object\n",
+      " 7   Secondary_Apps           386 non-null    object\n",
+      " 8   Usage_Frequency          500 non-null    object\n",
+      " 9   Daily_Usage_Time         500 non-null    object\n",
+      " 10  Reason_for_Using         500 non-null    object\n",
+      " 11  Satisfaction             500 non-null    int64 \n",
+      " 12  Challenges               383 non-null    object\n",
+      " 13  Desired_Features         500 non-null    object\n",
+      " 14  Preferred_Communication  500 non-null    object\n",
+      " 15  Partner_Priorities       500 non-null    object\n",
+      "dtypes: int64(3), object(13)\n",
+      "memory usage: 62.6+ KB\n"
+     ]
+    }
+   ],
+   "source": [
+    "data.info()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "1d5cd632-e295-4b0d-8e96-82cebf493c99",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: seaborn in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (0.13.2)\n",
+      "Requirement already satisfied: numpy!=1.24.0,>=1.20 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from seaborn) (2.2.2)\n",
+      "Requirement already satisfied: pandas>=1.2 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from seaborn) (2.2.3)\n",
+      "Requirement already satisfied: matplotlib!=3.6.1,>=3.4 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from seaborn) (3.10.0)\n",
+      "Requirement already satisfied: contourpy>=1.0.1 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from matplotlib!=3.6.1,>=3.4->seaborn) (1.3.1)\n",
+      "Requirement already satisfied: cycler>=0.10 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from matplotlib!=3.6.1,>=3.4->seaborn) (0.12.1)\n",
+      "Requirement already satisfied: fonttools>=4.22.0 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from matplotlib!=3.6.1,>=3.4->seaborn) (4.55.8)\n",
+      "Requirement already satisfied: kiwisolver>=1.3.1 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from matplotlib!=3.6.1,>=3.4->seaborn) (1.4.8)\n",
+      "Requirement already satisfied: packaging>=20.0 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from matplotlib!=3.6.1,>=3.4->seaborn) (24.2)\n",
+      "Requirement already satisfied: pillow>=8 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from matplotlib!=3.6.1,>=3.4->seaborn) (11.1.0)\n",
+      "Requirement already satisfied: pyparsing>=2.3.1 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from matplotlib!=3.6.1,>=3.4->seaborn) (3.2.1)\n",
+      "Requirement already satisfied: python-dateutil>=2.7 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from matplotlib!=3.6.1,>=3.4->seaborn) (2.9.0.post0)\n",
+      "Requirement already satisfied: pytz>=2020.1 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from pandas>=1.2->seaborn) (2025.1)\n",
+      "Requirement already satisfied: tzdata>=2022.7 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from pandas>=1.2->seaborn) (2025.1)\n",
+      "Requirement already satisfied: six>=1.5 in /opt/anaconda3/envs/ML/lib/python3.11/site-packages (from python-dateutil>=2.7->matplotlib!=3.6.1,>=3.4->seaborn) (1.17.0)\n"
+     ]
+    }
+   ],
+   "source": [
+    "!pip install seaborn"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "bd10b29d-a826-4bc7-ab0b-abbc929a7e7d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import seaborn as sns"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "af5aecf8-ad54-4f08-bb02-dad71e5a240d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "duplicates = data[data.duplicated()]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "1612258f-bcc7-4414-a811-a00893b49e8f",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Duplicate Rows:\n",
+      "Empty DataFrame\n",
+      "Columns: [User_ID, Age, Gender, Location, Education, Occupation, Primary_App, Secondary_Apps, Usage_Frequency, Daily_Usage_Time, Reason_for_Using, Satisfaction, Challenges, Desired_Features, Preferred_Communication, Partner_Priorities]\n",
+      "Index: []\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"Duplicate Rows:\")\n",
+    "print(duplicates)\n",
+    "\n",
+    "#there is no duplicate"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "68b9f696-c4aa-4313-9017-10c01f48e7b5",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "User_ID                     int64\n",
+      "Age                         int64\n",
+      "Gender                     object\n",
+      "Location                   object\n",
+      "Education                  object\n",
+      "Occupation                 object\n",
+      "Primary_App                object\n",
+      "Secondary_Apps             object\n",
+      "Usage_Frequency            object\n",
+      "Daily_Usage_Time           object\n",
+      "Reason_for_Using           object\n",
+      "Satisfaction                int64\n",
+      "Challenges                 object\n",
+      "Desired_Features           object\n",
+      "Preferred_Communication    object\n",
+      "Partner_Priorities         object\n",
+      "dtype: object\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(data.dtypes)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "id": "1cbc12f7-7000-45cc-b737-ebf41954d471",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['Undergraduate' 'Graduate' 'Postgraduate']\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(data['Education'].unique())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "977e6784-e58e-45b7-9bce-0737bac0f2cf",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['Freelancer' 'Part-time Job' 'Intern' 'Full-time Job' 'Student']\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(data['Occupation'].unique())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "id": "9009e198-bfb1-4ca8-b405-e6a430737312",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data['Education'] = data['Occupation'].str.lower() "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "id": "5f38d1f5-a754-480a-869f-4327b0af9c1f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data['education'] = data['Occupation'].str.strip()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "e994ee39-d120-460d-9715-1cd9976e1bbf",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data['Education'] = data['Occupation'].replace({\n",
+    "    'education': 'Education',\n",
+    "    'Education': 'Education',\n",
+    "    ' occupation': 'Occupation',\n",
+    "    'occupation': 'Occupation'\n",
+    "})"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "59287565-cbd8-4259-a268-7c71f16244e1",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['Freelancer' 'Part-time Job' 'Intern' 'Full-time Job' 'Student']\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(data['education'].unique())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "530ced52-e012-48a4-a2eb-5cbf884873c4",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data.to_csv('cleaned_data.csv', index=False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "45ccace1-081f-4577-a6b3-8979261ff021",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#there is no inconstencies in categorical values"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "03d82020-cdbb-4815-8948-a0a02b2c2ca8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#if a column has too many missing values you dicide whether to drop, fill "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "id": "fc5df2e0-d0ac-4934-9cab-6f884c6b10b8",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "User_ID                      0\n",
+      "Age                          0\n",
+      "Gender                       0\n",
+      "Location                     0\n",
+      "Education                    0\n",
+      "Occupation                   0\n",
+      "Primary_App                107\n",
+      "Secondary_Apps             114\n",
+      "Usage_Frequency              0\n",
+      "Daily_Usage_Time             0\n",
+      "Reason_for_Using             0\n",
+      "Satisfaction                 0\n",
+      "Challenges                 117\n",
+      "Desired_Features             0\n",
+      "Preferred_Communication      0\n",
+      "Partner_Priorities           0\n",
+      "education                    0\n",
+      "dtype: int64\n"
+     ]
+    }
+   ],
+   "source": [
+    "missing_values = data.isnull().sum()\n",
+    "print(missing_values)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "id": "92a27053-5681-414c-89e7-62cb2532e67c",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Primary_App       107\n",
+      "Secondary_Apps    114\n",
+      "Challenges        117\n",
+      "dtype: int64\n"
+     ]
+    }
+   ],
+   "source": [
+    "missing_columns = missing_values[missing_values > 0]\n",
+    "print(missing_columns)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "id": "87c0907d-c1ff-49ae-adc7-db9a5b7d8dde",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "User_ID                     0.0\n",
+      "Age                         0.0\n",
+      "Gender                      0.0\n",
+      "Location                    0.0\n",
+      "Education                   0.0\n",
+      "Occupation                  0.0\n",
+      "Primary_App                21.4\n",
+      "Secondary_Apps             22.8\n",
+      "Usage_Frequency             0.0\n",
+      "Daily_Usage_Time            0.0\n",
+      "Reason_for_Using            0.0\n",
+      "Satisfaction                0.0\n",
+      "Challenges                 23.4\n",
+      "Desired_Features            0.0\n",
+      "Preferred_Communication     0.0\n",
+      "Partner_Priorities          0.0\n",
+      "education                   0.0\n",
+      "dtype: float64\n"
+     ]
+    }
+   ],
+   "source": [
+    "missing_percentage = (data.isnull().sum() / len(data)) * 100\n",
+    "print(missing_percentage)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "id": "79e4495a-9286-484c-99ff-0f965128657a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "threshold = 0.5\n",
+    "data_dropped_columns = data.dropna(thresh=len(data) * (1 - threshold), axis=1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "id": "e5aa1d65-f591-4228-819b-8b5336f09ceb",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data_dropped_rows = data.dropna()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "id": "340f1586-d750-44a1-9a80-2cf67212d5be",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "/var/folders/3n/5_w7plqd0f1_bnxr3l6cpcq80000gn/T/ipykernel_42030/4260651178.py:1: FutureWarning: A value is trying to be set on a copy of a DataFrame or Series through chained assignment using an inplace method.\n",
+      "The behavior will change in pandas 3.0. This inplace method will never work because the intermediate object on which we are setting values always behaves as a copy.\n",
+      "\n",
+      "For example, when doing 'df[col].method(value, inplace=True)', try using 'df.method({col: value}, inplace=True)' or df[col] = df[col].method(value) instead, to perform the operation inplace on the original object.\n",
+      "\n",
+      "\n",
+      "  data['Secondary_Apps'].fillna(data['Secondary_Apps'].mode()[0], inplace=True)\n",
+      "/var/folders/3n/5_w7plqd0f1_bnxr3l6cpcq80000gn/T/ipykernel_42030/4260651178.py:2: FutureWarning: A value is trying to be set on a copy of a DataFrame or Series through chained assignment using an inplace method.\n",
+      "The behavior will change in pandas 3.0. This inplace method will never work because the intermediate object on which we are setting values always behaves as a copy.\n",
+      "\n",
+      "For example, when doing 'df[col].method(value, inplace=True)', try using 'df.method({col: value}, inplace=True)' or df[col] = df[col].method(value) instead, to perform the operation inplace on the original object.\n",
+      "\n",
+      "\n",
+      "  data['Primary_App'].fillna(data['Primary_App'].mode()[0], inplace=True)\n",
+      "/var/folders/3n/5_w7plqd0f1_bnxr3l6cpcq80000gn/T/ipykernel_42030/4260651178.py:3: FutureWarning: A value is trying to be set on a copy of a DataFrame or Series through chained assignment using an inplace method.\n",
+      "The behavior will change in pandas 3.0. This inplace method will never work because the intermediate object on which we are setting values always behaves as a copy.\n",
+      "\n",
+      "For example, when doing 'df[col].method(value, inplace=True)', try using 'df.method({col: value}, inplace=True)' or df[col] = df[col].method(value) instead, to perform the operation inplace on the original object.\n",
+      "\n",
+      "\n",
+      "  data['Challenges'].fillna(data['Challenges'].mode()[0], inplace=True)\n"
+     ]
+    }
+   ],
+   "source": [
+    "data['Secondary_Apps'].fillna(data['Secondary_Apps'].mode()[0], inplace=True)\n",
+    "data['Primary_App'].fillna(data['Primary_App'].mode()[0], inplace=True)\n",
+    "data['Challenges'].fillna(data['Challenges'].mode()[0], inplace=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "id": "3164c4a6-a7c7-42f8-a104-a8bef0528d77",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "User_ID                    0\n",
+       "Age                        0\n",
+       "Gender                     0\n",
+       "Location                   0\n",
+       "Education                  0\n",
+       "Occupation                 0\n",
+       "Primary_App                0\n",
+       "Secondary_Apps             0\n",
+       "Usage_Frequency            0\n",
+       "Daily_Usage_Time           0\n",
+       "Reason_for_Using           0\n",
+       "Satisfaction               0\n",
+       "Challenges                 0\n",
+       "Desired_Features           0\n",
+       "Preferred_Communication    0\n",
+       "Partner_Priorities         0\n",
+       "education                  0\n",
+       "dtype: int64"
+      ]
+     },
+     "execution_count": 41,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data.isnull().sum()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "id": "ffe6c6ae-9ab1-43b5-8a28-3de2819e4666",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Empty DataFrame\n",
+      "Columns: [User_ID, Age, Gender, Location, Education, Occupation, Primary_App, Secondary_Apps, Usage_Frequency, Daily_Usage_Time, Reason_for_Using, Satisfaction, Challenges, Desired_Features, Preferred_Communication, Partner_Priorities, education]\n",
+      "Index: []\n"
+     ]
+    }
+   ],
+   "source": [
+    "duplicates = data[data.duplicated()]\n",
+    "print(duplicates)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 43,
+   "id": "2e4939ea-a1c7-420d-aecf-e545e9a62c6c",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Number of duplicate rows: 0\n"
+     ]
+    }
+   ],
+   "source": [
+    "num_duplicates = data.duplicated().sum()\n",
+    "print(f\"Number of duplicate rows: {num_duplicates}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 45,
+   "id": "8ccc2bf1-cca7-438b-aa94-59c1e1dbea98",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "     User_ID  Age      Gender   Location      Education     Occupation  \\\n",
+      "4          5   18        Male      Delhi         Intern         Intern   \n",
+      "6          7   22  Non-binary    Chennai  Part-time Job  Part-time Job   \n",
+      "7          8   21      Female       Pune     Freelancer     Freelancer   \n",
+      "8          9   20        Male       Pune  Part-time Job  Part-time Job   \n",
+      "9         10   20  Non-binary    Chennai         Intern         Intern   \n",
+      "..       ...  ...         ...        ...            ...            ...   \n",
+      "495      496   23      Female     Mumbai         Intern         Intern   \n",
+      "496      497   23        Male     Mumbai         Intern         Intern   \n",
+      "497      498   22        Male  Hyderabad     Freelancer     Freelancer   \n",
+      "498      499   21      Female    Kolkata        Student        Student   \n",
+      "499      500   22        Male     Mumbai  Part-time Job  Part-time Job   \n",
+      "\n",
+      "    Primary_App Secondary_Apps Usage_Frequency Daily_Usage_Time  \\\n",
+      "4       OkCupid        OkCupid          Weekly          2 hours   \n",
+      "6        Tinder         Tinder         Monthly       30 minutes   \n",
+      "7         Hinge         Tinder          Weekly        1.5 hours   \n",
+      "8         Hinge        OkCupid           Daily          2 hours   \n",
+      "9       OkCupid         Bumble          Weekly          3 hours   \n",
+      "..          ...            ...             ...              ...   \n",
+      "495      Tinder          Hinge          Weekly        1.5 hours   \n",
+      "496     OkCupid         Tinder           Daily          2 hours   \n",
+      "497     OkCupid          Hinge         Monthly          2 hours   \n",
+      "498      Tinder          Hinge           Daily        1.5 hours   \n",
+      "499     OkCupid          Hinge          Weekly        1.5 hours   \n",
+      "\n",
+      "      Reason_for_Using  Satisfaction               Challenges  \\\n",
+      "4           Casual Fun             4          Safety Concerns   \n",
+      "6    Finding a Partner             4             Time-Wasting   \n",
+      "7    Finding a Partner             2          Safety Concerns   \n",
+      "8    Finding a Partner             1  Lack of Genuine Matches   \n",
+      "9    Finding a Partner             1          Safety Concerns   \n",
+      "..                 ...           ...                      ...   \n",
+      "495      Casual Dating             2  Lack of Genuine Matches   \n",
+      "496         Casual Fun             1             Time-Wasting   \n",
+      "497         Casual Fun             2  Lack of Genuine Matches   \n",
+      "498      Casual Dating             3  Lack of Genuine Matches   \n",
+      "499         Casual Fun             2             Time-Wasting   \n",
+      "\n",
+      "            Desired_Features Preferred_Communication  \\\n",
+      "4                Video Calls                    Text   \n",
+      "6                Audio Calls                    Text   \n",
+      "7                Audio Calls             Video Calls   \n",
+      "8                Audio Calls                    Text   \n",
+      "9    Location-Based Matching             Video Calls   \n",
+      "..                       ...                     ...   \n",
+      "495              Audio Calls             Voice Notes   \n",
+      "496              Video Calls             Video Calls   \n",
+      "497              Video Calls             Voice Notes   \n",
+      "498        Detailed Profiles                    Text   \n",
+      "499       AI Recommendations             Video Calls   \n",
+      "\n",
+      "                       Partner_Priorities      education  \n",
+      "4    Appearance > Interests > Personality         Intern  \n",
+      "6        Personality > Interests > Values  Part-time Job  \n",
+      "7       Values > Personality > Appearance     Freelancer  \n",
+      "8       Values > Personality > Appearance  Part-time Job  \n",
+      "9       Values > Personality > Appearance         Intern  \n",
+      "..                                    ...            ...  \n",
+      "495      Personality > Interests > Values         Intern  \n",
+      "496     Values > Personality > Appearance         Intern  \n",
+      "497  Appearance > Interests > Personality     Freelancer  \n",
+      "498  Appearance > Interests > Personality        Student  \n",
+      "499  Appearance > Interests > Personality  Part-time Job  \n",
+      "\n",
+      "[495 rows x 17 columns]\n"
+     ]
+    }
+   ],
+   "source": [
+    "duplicates_specific = data[data.duplicated(subset=['Education', 'Occupation'])]\n",
+    "print(duplicates_specific)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 46,
+   "id": "086dc583-2e07-44f1-b811-d8db33006981",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "     User_ID  Age      Gender   Location      Education     Occupation  \\\n",
+      "0          1   20  Non-binary  Bangalore     Freelancer     Freelancer   \n",
+      "1          2   24      Female      Delhi  Part-time Job  Part-time Job   \n",
+      "2          3   24  Non-binary    Kolkata         Intern         Intern   \n",
+      "3          4   22  Non-binary      Delhi  Full-time Job  Full-time Job   \n",
+      "4          5   18        Male      Delhi         Intern         Intern   \n",
+      "..       ...  ...         ...        ...            ...            ...   \n",
+      "495      496   23      Female     Mumbai         Intern         Intern   \n",
+      "496      497   23        Male     Mumbai         Intern         Intern   \n",
+      "497      498   22        Male  Hyderabad     Freelancer     Freelancer   \n",
+      "498      499   21      Female    Kolkata        Student        Student   \n",
+      "499      500   22        Male     Mumbai  Part-time Job  Part-time Job   \n",
+      "\n",
+      "    Primary_App Secondary_Apps Usage_Frequency Daily_Usage_Time  \\\n",
+      "0         Hinge          Hinge         Monthly           1 hour   \n",
+      "1         Hinge        OkCupid          Weekly       30 minutes   \n",
+      "2       OkCupid          Hinge          Weekly          2 hours   \n",
+      "3       OkCupid        OkCupid           Daily       30 minutes   \n",
+      "4       OkCupid        OkCupid          Weekly          2 hours   \n",
+      "..          ...            ...             ...              ...   \n",
+      "495      Tinder          Hinge          Weekly        1.5 hours   \n",
+      "496     OkCupid         Tinder           Daily          2 hours   \n",
+      "497     OkCupid          Hinge         Monthly          2 hours   \n",
+      "498      Tinder          Hinge           Daily        1.5 hours   \n",
+      "499     OkCupid          Hinge          Weekly        1.5 hours   \n",
+      "\n",
+      "      Reason_for_Using  Satisfaction               Challenges  \\\n",
+      "0    Finding a Partner             4          Safety Concerns   \n",
+      "1        Casual Dating             5             Time-Wasting   \n",
+      "2        Casual Dating             4          Safety Concerns   \n",
+      "3           Casual Fun             3  Lack of Genuine Matches   \n",
+      "4           Casual Fun             4          Safety Concerns   \n",
+      "..                 ...           ...                      ...   \n",
+      "495      Casual Dating             2  Lack of Genuine Matches   \n",
+      "496         Casual Fun             1             Time-Wasting   \n",
+      "497         Casual Fun             2  Lack of Genuine Matches   \n",
+      "498      Casual Dating             3  Lack of Genuine Matches   \n",
+      "499         Casual Fun             2             Time-Wasting   \n",
+      "\n",
+      "       Desired_Features Preferred_Communication  \\\n",
+      "0           Audio Calls             Video Calls   \n",
+      "1           Video Calls                    Text   \n",
+      "2     Detailed Profiles                    Text   \n",
+      "3    AI Recommendations             Voice Notes   \n",
+      "4           Video Calls                    Text   \n",
+      "..                  ...                     ...   \n",
+      "495         Audio Calls             Voice Notes   \n",
+      "496         Video Calls             Video Calls   \n",
+      "497         Video Calls             Voice Notes   \n",
+      "498   Detailed Profiles                    Text   \n",
+      "499  AI Recommendations             Video Calls   \n",
+      "\n",
+      "                       Partner_Priorities      education  \n",
+      "0       Values > Personality > Appearance     Freelancer  \n",
+      "1       Values > Personality > Appearance  Part-time Job  \n",
+      "2       Values > Personality > Appearance         Intern  \n",
+      "3        Personality > Interests > Values  Full-time Job  \n",
+      "4    Appearance > Interests > Personality         Intern  \n",
+      "..                                    ...            ...  \n",
+      "495      Personality > Interests > Values         Intern  \n",
+      "496     Values > Personality > Appearance         Intern  \n",
+      "497  Appearance > Interests > Personality     Freelancer  \n",
+      "498  Appearance > Interests > Personality        Student  \n",
+      "499  Appearance > Interests > Personality  Part-time Job  \n",
+      "\n",
+      "[500 rows x 17 columns]\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Remove duplicate rows and keep the first occurrence\n",
+    "data_no_duplicates = data.drop_duplicates()\n",
+    "\n",
+    "# Display the cleaned data\n",
+    "print(data_no_duplicates)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 47,
+   "id": "33b34b04-4b85-4ae1-a917-29220fab3f10",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data_no_duplicates_last = data.drop_duplicates(keep='last')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 48,
+   "id": "81a5a246-eaad-49ac-97c0-beea598c0333",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(data_no_duplicates.duplicated().sum())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 52,
+   "id": "2ae5773b-e672-496a-96d5-6c5f5e4af837",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import matplotlib.pyplot as plt"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 53,
+   "id": "0b462e48-3b8d-4ebb-8f3e-35f269d546ae",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "iVBORw0KGgoAAAANSUhEUgAAAx8AAAHACAYAAADDU9V2AAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90bGliIHZlcnNpb24zLjEwLjAsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvlHJYcgAAAAlwSFlzAAAPYQAAD2EBqD+naQAAFpRJREFUeJzt3QuMXFX9wPGz2213C7RbeVVKdwmKlCiPCIGAhLYG5CExohiMtf+/xEIReVQwRGqJgELAB6hRETEKFsRADSCCYgiQEkgJj1AeEVpoG1ooQgztbgttqez951z/u+lCS2ttf/fOzueTjOPuzNJDD7Mz37nn3GkpiqJIAAAA21nr9v4DAAAAMvEBAACEEB8AAEAI8QEAAIQQHwAAQAjxAQAAhBAfAABACPEBAACEaNvaH+zr60vLly9Po0aNSi0tLdt2VAAAQMPIn1u+atWqNG7cuNTa2rrt4yOHR1dX19b+OAAAMMQsW7YsjR8/ftvHRz7i0f8HjB49emv/MQAAQIPr7e0tD0z0N8I2j4/+pVY5PMQHAADQspntGDacAwAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABCiLeaPAar22muvpZ6enqqHAUAD6+zsTGPHjq16GDQw8QFNEh5T/+d/0/q311U9FAAa2PAR7emmG2cLELaa+IAmkI945PBY86FJqa+js+rhQC21rlmZRi55MK3Ze2LqGzmm6uFA7bSu7Ulp8dzyOUV8sLXEBzSRHB59O+5a9TCg1nJ4eJwAbB82nAMAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACGGRHysXbs2LVy4sLwGAIBmsLYBXwMPifhYunRpmj59enkNAADNYGkDvgYeEvEBAADUn/gAAABCiA8AACCE+AAAAEKIDwAAIIT4AAAAQogPAAAghPgAAABCiA8AACCE+AAAAEKIDwAAIIT4AAAAQogPAAAghPgAAABCiA8AACCE+AAAAEKIDwAAIIT4AAAAQogPAAAghPgAAABCiA8AACCE+AAAAEKIDwAAIIT4AAAAQogPAAAghPgAAABCiA8AACCE+AAAAEKIDwAAIIT4AAAAQogPAAAghPgAAABCiA8AACCE+AAAAEKIDwAAIIT4AAAAQogPAAAghPgAAABCiA8AACCE+AAAAEKIDwAAIIT4AAAAQogPAAAghPgAAABCiA8AACCE+AAAAEKIDwAAIIT4AAAAQogPAAAghPgAAABCiA8AACCE+AAAAEKIDwAAIIT4AAAAQogPAAAghPgAAABCiA8AACCE+AAAAEKIDwAAIIT4AAAAQogPAAAghPgAAABCiA8AACCE+AAAAEKIDwAAIIT4AAAAQogPAAAghPgAAABCiA8AACCE+AAAAEKIDwAAIIT4AAAAQogPAAAghPgAAABCiA8AACBE25becd26deWlX29vb6qbl156qeohQC15bACwrXhOqY+XGnAutjg+rrjiinTppZemOrv88surHgIAwJDm9RYh8TFz5sx0/vnnDzry0dXVlepk1qxZaa+99qp6GFDLd0Y8WQCwLXi9VR8vNeDz+xbHR3t7e3mps/xA2HfffaseBgDAkOX1Fv8NG84BAIAQ4gMAAAghPgAAgBDiAwAACCE+AACAEOIDAAAIIT4AAIAQ4gMAAAghPgAAgBDiAwAACCE+AACAEOIDAAAIIT4AAIAQ4gMAAAghPgAAgBDiAwAACCE+AACAEOIDAAAIIT4AAIAQ4gMAAAghPgAAgBDiAwAACCE+AACAEOIDAAAIIT4AAIAQ4gMAAAghPgAAgBDiAwAACCE+AACAEOIDAAAIIT4AAIAQ4gMAAAghPgAAgBDiAwAACCE+AACAEOIDAAAIIT4AAIAQ4gMAAAghPgAAgBDiAwAACCE+AACAEOIDAAAIIT4AAIAQ4gMAAAghPgAAgBDiAwAACCE+AACAEOIDAAAIIT4AAIAQ4gMAAAghPgAAgBDiAwAACCE+AACAEOIDAAAIIT4AAIAQ4gMAAAghPgAAgBDiAwAACCE+AACAEOIDAAAIIT4AAIAQ4gMAAAghPgAAgBDiAwAACCE+AACAEOIDAAAIIT4AAIAQ4gMAAAghPgAAgBDiAwAACCE+AACAEOIDAAAIIT4AAIAQ4gMAAAghPgAAgBBDIj66u7vTddddV14DAEAz6G7A18BtaQjo6OhI++67b9XDAACAMB0N+Bp4SBz5AAAA6k98AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEEJ8AAAAIcQHAAAQQnwAAAAhxAcAABBCfAAAACHEBwAAEKIt5o8B6qB1bU/VQ4Daal2zctA1MJjnELYF8QFNoLOzMw0f0Z7S4rlVDwVqb+SSB6seAtRWfi7JzymwtcQHNIGxY8emm26cnXp6vGsFwNbL4ZGfU2BriQ9oEvnJwhMGAFAlG84BAIAQ4gMAAAghPgAAgBDiAwAACCE+AACAEOIDAAAIIT4AAIAQ4gMAAAghPgAAgBDiAwAACCE+AACAEOIDAAAIIT4AAIAQ4gMAAAghPgAAgBDiAwAACCE+AACAEOIDAAAIIT4AAIAQ4gMAAAghPgAAgBDiAwAACCE+AACAEOIDAAAIIT4AAIAQ4gMAAAghPgAAgBDiAwAACCE+AACAEOIDAAAIIT4AAIAQ4gMAAAghPgAAgBDiAwAACCE+AACAEG1b+4NFUZTXvb2923I8AABAg+lvgv5G2ObxsWrVqvK6q6tra/8RAADAEJIbobOzc5O3txSby5NN6OvrS8uXL0+jRo1KLS0tqerSyhG0bNmyNHr06ErHwr+Zk3oxH/VjTurHnNSL+agfc1I/vTWak5wUOTzGjRuXWltbt/2Rj/wPHT9+fKqT/Jde9V88g5mTejEf9WNO6sec1Iv5qB9zUj+jazIn73fEo58N5wAAQAjxAQAAhBgS8dHe3p4uvvji8pp6MCf1Yj7qx5zUjzmpF/NRP+akftobcE62esM5AABA0x35AAAA6k98AAAAIcQHAAAQQnwAAAAhGio+HnzwwfSZz3ym/OTE/Knqd9xxx6DbV69enc4+++zyww9HjhyZPvrRj6Zrr722svEOdZubj9deey2deuqp5e077LBDOv7449MLL7xQ2XibwRVXXJEOPfTQNGrUqLT77runk046KS1YsGDQfdauXZvOOuustMsuu6SddtopnXzyyeVcUc18XHfddWny5Mnlh0Plx9HKlSsrG28z2NycvPHGG+mcc85JEyZMKJ9Huru707nnnpt6enoqHXezP07OOOOM9OEPf7ick9122y199rOfTc8//3xlY272+eiXz1l0wgknbPQ1ALFzMnny5HIeNrx87WtfS3XUUPHx5ptvpoMOOij94he/2Ojt559/frrnnnvSTTfdlJ577rn0jW98o4yRO++8M3yszeD95iP/QsoPjsWLF6c//elP6cknn0x77bVXOuaYY8qfY/uYO3duGRaPPPJIuvfee9P69evTscceO+jv/Lzzzkt//vOf05w5c8r7L1++PH3+85+vdNzNPB9vvfVWGebf/va3Kx1rs9jcnOTHQ7786Ec/Ss8++2y64YYbyueVadOmVT30pn6cHHLIIen6668vn9v/9re/lc8x+T7vvPNOpWNv1vno95Of/KR8kUs95uT0009Pr7766sDlBz/4QaqlokHlod9+++2Dvvexj32s+O53vzvoewcffHAxa9as4NE1n3fPx4IFC8rvPfvsswPfe+edd4rddtut+PWvf13RKJvP66+/Xs7D3Llzy69XrlxZDB8+vJgzZ87AfZ577rnyPvPmzatwpM05Hxt64IEHyttWrFhRydia1fvNSb9bb721GDFiRLF+/frQsTWrLZmTp556qrzPiy++GDq2ZrSp+XjyySeLPffcs3j11Vc3+pqM2DmZNGlSMWPGjKIRNNSRj835xCc+UR7leOWVV8p3RR544IG0cOHCsg6JtW7duvK6o6Nj4Hutra3lh+A89NBDFY6sufQvFdl5553L6yeeeKJ8xyQfgeq33377lUtL5s2bV9k4m3U+aIw5yffJy+La2toCR9a8Njcn+d3efBRk7733Tl1dXcGjaz4bm498xHbKlCnlyocPfvCDFY6uOW3qMfL73/8+7brrrmn//fdPM2fOLOepjoZUfPzsZz8r93nkPR8jRowolzLkB8bEiROrHlrT6X9Bm//jX7FiRXr77bfT97///fTyyy+XhwLZ/vr6+sqlh0ceeWT5iyj7xz/+UT42xowZM+i+Y8eOLW8jdj6o/5z885//TN/73vfS9OnTw8fXjN5vTq655ppyn1q+/PWvfy2Xn+TfZ8TPR16+m9/wzXtvqMecTJkypdx2kN94z6+9brzxxjR16tRUR21DLT7yerh89CPvL8gbovMaubzhecN3etn+hg8fnm677bZynXQu82HDhpVzkDem/XuVFttb/m8/r1l3pKkezEfjzUlvb2868cQTyze1LrnkkvDxNaP3m5Mvf/nL6VOf+lT5Blbek3PKKaekhx9+eNARdrb/fOTXWPfff3+5l5P6PEamb/AGyQEHHJD22GOPdPTRR6dFixaVJ2uolaJBvXt94VtvvVWuZb/rrrsG3W/atGnFcccdV8EIm8v7rffM+wzy+sTssMMOK77+9a8Hj675nHXWWcX48eOLxYsXD/r+fffdt9F9Bd3d3cXVV18dPMrmsan52JA9H/Wak97e3uKII44ojj766GLNmjXh42tGW/I46bdu3bpihx12KG6++eaQsTWjTc1H3lfQ0tJSDBs2bOCSf3e1traW+w6ox2Nk9erV5bzcc889Rd0MmWVXeR17vuR9BRvK77jnQ1RUp7Ozszw1Yj7N7uOPP+4w7XaUOzCf4e32228v35nKa6I3lM8Yk49K3XfffQPfy6frW7p0aTriiCMqGHFzzwf1nJN8xCPvFcxLevK7vN5Zr9/jJP9MvvTvLyRuPi688ML09NNPp/nz5w9csh//+MflXhzq8RiZ///zko+A1E1DLbvKn+Px4osvDny9ZMmS8i83L+vJ+wsmTZqULrjggvI84HnZVT412ezZs9PVV19d6biHqs3NRz6Va46O/P+feeaZNGPGjPL0u04AsH0Px958883l6Y3z+cD793HkAMyPi3ydl8Ll01LnecqbaPNnGuTwOPzww6seftPNR5a/ly/9j6X8WMn3zY8bG9Pj56Q/PPJGzbx+On+dL1n+fZbf0CJ2TvIp22+55ZZyXvIc5L2DV155ZXnbpz/96aqH33TzkTeYb2yTef6d5Q2WauZk0aJF5e358ZA/wyvHYd6Xk/c8H3jggal2igbSvyzh3ZevfOUr5e35dG+nnnpqMW7cuKKjo6OYMGFCcdVVVxV9fX1VD31I2tx8/PSnPy0PD+blcHlZz0UXXVQeKmf72dh85Mv1118/cJ+8hCQvffvABz5QLlv43Oc+Vz52qGY+Lr744s3eh7g52dTvtXxZsmRJ1cNvyjl55ZVXihNOOKHYfffdy+eT/LwyZcqU4vnnn6966E37e2tjP+NUu9XNydKlS4uJEycWO++8c9He3l7ss88+xQUXXFD09PQUddSS/6fqAAIAAIa+IbPnAwAAqDfxAQAAhBAfAABACPEBAACEEB8AAEAI8QEAAIQQHwAAQAjxAQAAhBAfAGzUvHnz0rBhw9KJJ55Y9VAAGCJ8wjkAG3XaaaelnXbaKf3mN79JCxYsSOPGjat6SAA0OEc+AHiP1atXp1tuuSWdeeaZ5ZGPG264YdDtd955Z/rIRz6SOjo60ic/+cn0u9/9LrW0tKSVK1cO3Oehhx5KRx11VBo5cmTq6upK5557bnrzzTcr+LcBoC7EBwDvceutt6b99tsvTZgwIU2dOjX99re/Tf0HypcsWZK+8IUvpJNOOik99dRT6YwzzkizZs0a9POLFi1Kxx9/fDr55JPT008/XYZMjpGzzz67on8jAOrAsisA3uPII49Mp5xySpoxY0b617/+lfbYY480Z86cNHny5HThhRemu+++Oz3zzDMD97/ooovS5ZdfnlasWJHGjBlTLtnK+0V+9atfDdwnx8ekSZPKox/5iAkAzceRDwAGyfs7Hn300fSlL32p/LqtrS198YtfLPd+9N9+6KGHDvqZww47bNDX+YhIXqqV94z0X4477rjU19dXHjkBoDm1VT0AAOolR0Y+2rHhBvN8kLy9vT39/Oc/3+I9I3k5Vt7n8W7d3d3bdLwANA7xAcCAHB2zZ89OV111VTr22GMH3Zb3ePzhD38o94H85S9/GXTbY489Nujrgw8+OP39739P++yzT8i4AWgM9nwAMOCOO+4ol1i9/vrrqbOzc9Bt3/rWt9L9999fbkbPAXLeeeeladOmpfnz56dvfvOb6eWXXy7PdpV/Lm8yP/zww9NXv/rVcv/HjjvuWMbIvffeu8VHTwAYeuz5AGDQkqtjjjnmPeGR5TNXPf7442nVqlXpj3/8Y7rtttvSgQcemH75y18OnO0qL83K8vfnzp2bFi5cWJ5u9+Mf/3j6zne+47NCAJqcIx8A/Nfyma6uvfbatGzZsqqHAkCN2fMBwH/smmuuKc94tcsuu6SHH344/fCHP/QZHgBslvgA4D/2wgsvpMsuuyy98cYb5dmr8p6PmTNnVj0sAGrOsisAACCEDecAAEAI8QEAAIQQHwAAQAjxAQAAhBAfAABACPEBAACEEB8AAEAI8QEAAIQQHwAAQIrwf7wUxOOFVM3eAAAAAElFTkSuQmCC",
+      "text/plain": [
+       "<Figure size 1000x500 with 1 Axes>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Empty DataFrame\n",
+      "Columns: [User_ID, Age, Gender, Location, Education, Occupation, Primary_App, Secondary_Apps, Usage_Frequency, Daily_Usage_Time, Reason_for_Using, Satisfaction, Challenges, Desired_Features, Preferred_Communication, Partner_Priorities, education]\n",
+      "Index: []\n"
+     ]
+    }
+   ],
+   "source": [
+    "import matplotlib.pyplot as plt\n",
+    "import seaborn as sns\n",
+    "plt.figure(figsize=(10,5))\n",
+    "sns.boxplot(x=data['Age'])\n",
+    "plt.show()\n",
+    "Q1 = data['Age'].quantile(0.25)\n",
+    "Q3 = data['Age'].quantile(0.75)\n",
+    "IQR = Q3 - Q1\n",
+    "lower_bound = Q1 - 1.5 * IQR\n",
+    "upper_bound = Q3 + 1.5 * IQR\n",
+    "outliers = data[(data['Age'] < lower_bound) | (data['Age'] > upper_bound)]\n",
+    "print(outliers)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d813732b-fe61-4be1-8b50-d039e4b5972a",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.11.11"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
